@@ -1,5 +1,5 @@
 // sw.js — service worker: makes the app installable and usable offline
-const CACHE = 'frontedge-v1';                         // bump this name to force users onto a new version
+const CACHE = 'frontedge-v2';                         // bump this name to force users onto a new version
 const SHELL = ['/', '/index.html', '/manifest.webmanifest', '/icons/icon-192.png'];
 
 // install: pre-cache the app shell so the first offline open works

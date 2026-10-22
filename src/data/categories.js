@@ -63,7 +63,7 @@ export const CATEGORIES = [
     ]
   },
   {
-    id: 'nextjs', name: 'Next.js', icon: '▲', color: '#e9ecef',
+    id: 'nextjs', name: 'Next.js', icon: '▲', color: '#868e96',
     desc: 'App Router, rendering strategies, caching, Server Actions and deployment.',
     roadmap: [
       { stage: 'Basics', items: ['File-based routing', 'Layouts', 'Link & navigation'] },

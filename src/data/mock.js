@@ -174,15 +174,17 @@ export function shuffle(arr) {
   return a;                                          // shuffled copy
 }
 
-// Build a test: filter by categories + level window, then randomise
-export function buildTest({ cats = [], level = null, count = 15 }) {
-  let pool = QUESTIONS;
-  if (cats.length) pool = pool.filter((q) => cats.includes(q.cat));
-  if (level !== null) pool = pool.filter((q) => q.level <= level && q.level >= level - 1);
-  if (pool.length < count && level !== null) {       // widen the level window if too few
-    pool = QUESTIONS.filter((q) => (!cats.length || cats.includes(q.cat)) && q.level <= level);
-  }
-  return shuffle(pool).slice(0, count).map((q) => {  // shuffle options while tracking the answer
+// Build a test: curated questions first (up to ~60%), topped up with auto-generated concept questions
+export function buildTest({ cats = [], level = null, count = 15, extra = [] }) {
+  const fits = (q) => (!cats.length || cats.includes(q.cat)) &&
+    (level === null || (q.level <= level && q.level >= level - 1));
+  let curated = QUESTIONS.filter(fits);
+  if (curated.length < 3 && level !== null) curated = QUESTIONS.filter((q) => (!cats.length || cats.includes(q.cat)) && q.level <= level);
+  const generated = extra.filter(fits);
+  const takeCurated = Math.min(curated.length, Math.ceil(count * 0.6));
+  const picked = [...shuffle(curated).slice(0, takeCurated), ...shuffle(generated).slice(0, count - takeCurated)];
+  if (picked.length < count) picked.push(...shuffle(curated).slice(takeCurated, takeCurated + (count - picked.length)));
+  return shuffle(picked).slice(0, count).map((q) => {        // shuffle options while tracking the answer
     const order = shuffle(q.options.map((_, i) => i));
     return { ...q, options: order.map((i) => q.options[i]), answer: order.indexOf(q.answer) };
   });

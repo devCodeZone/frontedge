@@ -6,14 +6,16 @@ An installable mobile app (Android + iOS) for frontend developers of every level
 
 | Feature | Where |
 |---|---|
-| 21 tracks: HTML, CSS, JS (ES2025), TypeScript, jQuery, React 19, Next.js, Angular 17–20, Vue 3, State, Web APIs, Networking, Performance, Security, Testing, Tooling, A11y, PWA, DevOps, System Design, **AI-Integrated Frontend** | `src/data/categories.js` |
-| Each term: one-liner, explanation, flow diagram, implementation with a comment on every line, interview Q&A, coding Q&A, term roadmap, "study next" | `src/data/terms/*.js` |
-| Diagrammatic roadmap page for every track | `#/roadmap/<track>` |
-| Mock tests: MCQ (timed, auto-scored, review), interview flashcards, coding round — filtered by topic, experience (Fresher → Architect) or company (TCS, Infosys, Wipro, HCL, Accenture, Capgemini, Cognizant, Publicis Sapient, Deloitte, Flipkart, Amazon, Google, Microsoft, startups) | `src/data/mock.js` |
-| AI Mentor (Gemini) that answers and links to the exact term to study; falls back to offline topic search without a key | `api/chat.js`, `src/components/Chat.jsx` |
-| Live trending articles (DEV.to API) + curated Release Watch | `api/news.js`, `src/data/index.js` |
-| Saved terms, "mastered" progress, test history (stored on device) | `src/lib.js` |
-| Offline + install to home screen | `public/manifest.webmanifest`, `public/sw.js` |
+| **Complete syllabus: 478 terms in 21 tracks**, organised into modules — HTML, CSS, JavaScript, TypeScript, jQuery, React, Next.js, Angular, Vue, State, Web APIs, Networking, Performance, Security, Testing, Tooling, Accessibility, PWA, Git/CI/CD, System Design, **AI-Integrated Frontend** | `src/data/syllabus/*.js` |
+| Every term: one-liner, explanation, key points, flow diagram, code with a comment on every line, interview Q&A, coding Q&A, common mistakes, module roadmap, prev/next | `src/components/Learn.jsx` |
+| Track syllabus page: modules with progress, level filters, in-track search, Continue button | `#/cat/<track>` |
+| Track roadmap (diagram + timeline) | `#/roadmap/<track>` |
+| Quick-revise flashcards per track / saved / all | `#/revise/<track>` |
+| Mock tests: curated MCQs + auto-generated questions from all 478 terms, interview & coding rounds; by topic, experience or company pattern | `src/components/Mock.jsx`, `src/data/mock.js` |
+| AI Mentor (Groq / Gemini / OpenRouter / Claude / OpenAI) with offline library fallback | `api/chat.js`, `src/components/Chat.jsx` |
+| Progress, streaks, saved terms, light/dark theme, text size, offline download | `#/saved` |
+
+Tracks load on demand (one small chunk each) and are cached by the service worker for offline use.
 
 ## Run locally
 
@@ -43,7 +45,7 @@ Before going public, add rate limiting to `/api/chat` (e.g. Upstash Redis) so no
 
 ## Adding content
 
-Copy any object in `src/data/terms/*.js` and change the fields — it appears automatically in its track, search, mock tests and the AI catalog. Add MCQs as rows in `RAW` in `src/data/mock.js`. Diagrams use Mermaid syntax (keep labels inside `["..."]`, avoid `<` `>`).
+Add a term inside a module in `src/data/syllabus/<track>.js` using the `t('id', 'Name', 'B'|'I'|'A', { one, ex, pts, flow, code, iq, cq, err })` helper (format documented in `src/data/normalize.js`). Run `npm run catalog` (also runs automatically before dev/build) — it validates every term and rebuilds `src/data/catalog.json`, so the term appears in its track, search, roadmaps, flashcards, mock tests and the AI catalog. Add MCQs as rows in `RAW` in `src/data/mock.js`. Diagrams use Mermaid syntax (keep labels inside `["..."]`, avoid `<` `>`).
 
 ## A note on company mock tests
 

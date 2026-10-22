@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "catalog": "node scripts/build-catalog.mjs",
+    "predev": "node scripts/build-catalog.mjs",
     "dev": "vite",
+    "prebuild": "node scripts/build-catalog.mjs",
     "build": "vite build",
     "preview": "vite preview"
   },
